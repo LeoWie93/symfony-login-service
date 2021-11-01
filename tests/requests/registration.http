@@ -1,0 +1,8 @@
+POST http://{{serverUrl}}:47000/api/register-user
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+Cookie: XDEBUG_SESSION=PHPSTORM
+
+email={{email}}&username={{username}}&password={{password}}&salutation=
+
+###

@@ -1,0 +1,7 @@
+// #Credential Login
+POST http://login-service.127.h2g.ch:47000/api/login
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}&password={{password}}
+
+###
