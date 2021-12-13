@@ -45,6 +45,21 @@ class User
      */
     private $tokens;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $active = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $deleted = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $activationCode;
+
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
@@ -129,6 +144,42 @@ class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(): self
+    {
+        $this->active = true;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(): self
+    {
+        $this->deleted = true;
+
+        return $this;
+    }
+
+    public function getActivationCode(): ?string
+    {
+        return $this->activationCode;
+    }
+
+    public function setActivationCode(?string $activationCode): self
+    {
+        $this->activationCode = $activationCode;
 
         return $this;
     }

@@ -39,6 +39,19 @@ class UserRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function findByOneActivationCode(string $code): ?User
+    {
+
+        $res = $this->createQueryBuilder('u')
+            ->where('u.activationCode = :code')
+            ->setParameter('code', $code)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+
+        return $res[0] ?? null;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

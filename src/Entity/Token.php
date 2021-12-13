@@ -15,23 +15,23 @@ class Token
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tokens")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $token;
+    private string $token;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $expires;
+    private integer $expires;
 
     public function getId(): ?int
     {

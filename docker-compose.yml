@@ -1,42 +1,57 @@
-version: '3.1'
+version: '3.5'
 services:
-    mailhog:
-        image: 'mailhog/mailhog:latest'
-        container_name: logins-mailhog
-        ports:
-            - '47001:8025'
+  mailhog:
+    image: 'mailhog/mailhog:latest'
+    container_name: logins-mailhog
+    networks:
+      - login-service
+    ports:
+      - '47001:8025'
 
-    mysql:
-        image: 'mysql:8.0'
-        container_name: logins-mysql
-        working_dir: /application
-        volumes:
-            - '.:/application'
-        environment:
-            - MYSQL_ROOT_PASSWORD=logins
-            - MYSQL_DATABASE=login-service
-            - MYSQL_USER=logins
-            - MYSQL_PASSWORD=logins
-        ports:
-            - '47002:3306'
+  mysql:
+    image: 'mysql:8.0'
+    container_name: logins-mysql
+    working_dir: /application
+    networks:
+      - login-service
+    volumes:
+      - 'mysql:/var/lib/mysql'
+    environment:
+      - MYSQL_ROOT_PASSWORD=logins
+      - MYSQL_DATABASE=login-service
+      - MYSQL_USER=logins
+      - MYSQL_PASSWORD=logins
+    ports:
+      - '47002:3306'
 
-    webserver:
-        image: 'nginx:alpine'
-        container_name: logins-webserver
-        working_dir: /application
-        volumes:
-            - '.:/application'
-            - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
-        ports:
-            - '47000:80'
+  webserver:
+    image: 'nginx:alpine'
+    container_name: logins-webserver
+    networks:
+      - login-service
+    working_dir: /application
+    volumes:
+      - '.:/application'
+      - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+    ports:
+      - '47000:80'
 
-    php-fpm:
-        build: phpdocker/php-fpm
-        container_name: logins-php-fpm
-        working_dir: /application
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        volumes:
-            - '.:/application'
-            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini'
-            - './phpdocker/php-fpm/xdebug.ini:/etc/php/7.4/mods-available/xdebug.ini'
+  php-fpm:
+    build: phpdocker/php-fpm
+    container_name: logins-php-fpm
+    networks:
+      - login-service
+    working_dir: /application
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - '.:/application'
+      - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini'
+      - './phpdocker/php-fpm/xdebug.ini:/etc/php/7.4/mods-available/xdebug.ini'
+
+networks:
+  login-service:
+    name: login-service
+
+volumes:
+  mysql:
