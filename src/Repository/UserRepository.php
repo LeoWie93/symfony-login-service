@@ -25,8 +25,9 @@ class UserRepository extends ServiceEntityRepository
      */
     public function save(User $user)
     {
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
     }
 
     /**
@@ -35,8 +36,9 @@ class UserRepository extends ServiceEntityRepository
      */
     public function remove(User $user)
     {
-        $this->getEntityManager()->remove($user);
-        $this->getEntityManager()->flush();
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($user);
+        $entityManager->flush();
     }
 
     public function findByOneActivationCode(string $code): ?User

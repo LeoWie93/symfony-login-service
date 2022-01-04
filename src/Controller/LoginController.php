@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LoginController extends AbstractController
 {
     /**
-     * @Route("/login", name="login",methods={"GET"})
+     * @Route("/login", name="login",methods={"POST"})
      */
     public function login(
         CredentialService $credentialService,
@@ -24,13 +24,15 @@ class LoginController extends AbstractController
         $password = $request->request->get('password') ?? '';
 
         try {
-            $credentialService->loginWithCredentials($username, $password);
+            $user = $credentialService->loginWithCredentials($username, $password);
+            $jwt = $user->getTokens()[0];
+
             return new JsonResponse([
                 'code' => '2000',
                 'message' => 'success',
                 'body' => [
-                    'token' => '$jwt',
-                    'expires' => '$jwt->expires',
+                    'token' => $jwt->getToken(),
+                    'expires' => $jwt->getExpires(),
                 ],
             ], Response::HTTP_OK);
         } catch (ServiceException $e) {
@@ -39,14 +41,9 @@ class LoginController extends AbstractController
                 'message' => $e->getMessage()
             ], $e->getHttpCode());
         } catch (\Exception $e) {
+            //TODO create usable json response. LWI 04.01.2021
             die(var_dump($e->getMessage()));
         }
-
-
-        // get username and password from POST request
-        // userService->loginWithCredentials(username,password);
-        // returns valid jwt with userdata etc
-        // or throws error
     }
 
     /**

@@ -31,7 +31,7 @@ class Token
     /**
      * @ORM\Column(type="integer")
      */
-    private integer $expires;
+    private int $expires;
 
     public function getId(): ?int
     {
