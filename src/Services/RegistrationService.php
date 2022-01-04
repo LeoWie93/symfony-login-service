@@ -5,19 +5,19 @@ namespace App\Services;
 
 use App\Entity\User;
 use App\Exceptions\ServiceException;
-use App\Repository\UserRepository;
+use App\Repository\UserStorage;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationService
 {
-    private UserRepository $repository;
+    private UserStorage $storage;
 
     public function __construct(
-        UserRepository $repository
+        UserStorage $storage
     )
     {
-        $this->repository = $repository;
+        $this->storage = $storage;
     }
 
     /**
@@ -46,7 +46,7 @@ class RegistrationService
         $uniqueString = sprintf('%s%s', $user->getUsername(), (new DateTime())->getTimestamp());
         $user->setActivationCode(hash("sha1", $uniqueString));
         try {
-            $this->repository->save($user);
+            $this->storage->save($user);
             //TODO trigger registration mail
         } catch (\Exception $e) {
             //log error
@@ -56,14 +56,14 @@ class RegistrationService
 
     public function activateUser(string $code)
     {
-        if (!$user = $this->repository->findByOneActivationCode($code)) {
+        if (!$user = $this->storage->findOneByActivationCode($code)) {
             throw new ServiceException('no.valid.activationCode', 4222);
         }
 
         try {
             $user->setActive();
             $user->setActivationCode(null);
-            $this->repository->save($user);
+            $this->storage->save($user);
             //TODO return jwt token
 
 

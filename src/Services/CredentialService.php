@@ -2,31 +2,29 @@
 
 namespace App\Services;
 
-use App\Entity\Token;
 use App\Entity\User;
 use App\Exceptions\ServiceException;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Firebase\JWT\JWT;
+use App\Repository\TokenStorage;
+use App\Repository\UserStorage;
 
 /**
  * Class CredentialService
  */
 class CredentialService
 {
-    private UserRepository $userRepository;
-    private EntityManagerInterface $entityManager;
     private JWTService $jwtService;
+    private UserStorage $userStorage;
+    private TokenStorage $tokenStorage;
 
     public function __construct(
-        JWTService             $jwtService,
-        UserRepository         $userRepository,
-        EntityManagerInterface $entityManager
+        JWTService   $jwtService,
+        UserStorage  $userStorage,
+        TokenStorage $tokenStorage
     )
     {
-        $this->userRepository = $userRepository;
-        $this->entityManager = $entityManager;
         $this->jwtService = $jwtService;
+        $this->userStorage = $userStorage;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -34,13 +32,11 @@ class CredentialService
      */
     public function loginWithCredentials(string $username, string $password): User
     {
-        $user = $this->userRepository->findOneBy(['username' => $username]);
+        $user = $this->userStorage->findOneByUsername($username);
         if ($user && password_verify($password, $user->getPassword())) {
             $token = $this->jwtService->createToken($user);
             $user->addToken($token);
-            $this->entityManager->persist($token);
-            $this->entityManager->flush();
-
+            $this->tokenStorage->save($token);
             return $user;
         }
 

@@ -19,31 +19,8 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function save(User $user)
+    public function findOneByActivationCode(string $code): ?User
     {
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
-    }
-
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function remove(User $user)
-    {
-        $entityManager = $this->getEntityManager();
-        $entityManager->remove($user);
-        $entityManager->flush();
-    }
-
-    public function findByOneActivationCode(string $code): ?User
-    {
-
         $res = $this->createQueryBuilder('u')
             ->where('u.activationCode = :code')
             ->setParameter('code', $code)
