@@ -26,7 +26,7 @@ class JWTService
                 'exp' => $token->getExpires(),
                 'sub' => $user->getId(),
                 'name' => $user->getUsername(),
-                'active' => $user->getActive()
+                'active' => $user->getActive(),
             ],
             $this->passphrase
         );

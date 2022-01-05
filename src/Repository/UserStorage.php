@@ -11,10 +11,9 @@ class UserStorage
     private EntityManagerInterface $em;
 
     public function __construct(
-        UserRepository         $repository,
+        UserRepository $repository,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->em = $em;
     }

@@ -8,7 +8,7 @@ use App\Repository\TokenStorage;
 use App\Repository\UserStorage;
 
 /**
- * Class CredentialService
+ * Class CredentialService.
  */
 class CredentialService
 {
@@ -17,11 +17,10 @@ class CredentialService
     private TokenStorage $tokenStorage;
 
     public function __construct(
-        JWTService   $jwtService,
-        UserStorage  $userStorage,
+        JWTService $jwtService,
+        UserStorage $userStorage,
         TokenStorage $tokenStorage
-    )
-    {
+    ) {
         $this->jwtService = $jwtService;
         $this->userStorage = $userStorage;
         $this->tokenStorage = $tokenStorage;
@@ -37,6 +36,7 @@ class CredentialService
             $token = $this->jwtService->createToken($user);
             $user->addToken($token);
             $this->tokenStorage->save($token);
+
             return $user;
         }
 

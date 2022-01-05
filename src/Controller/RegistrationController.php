@@ -17,17 +17,16 @@ class RegistrationController extends AbstractController
      */
     public function registerUser(
         RegistrationService $registrationService,
-        Request             $request
-    ): Response
-    {
+        Request $request
+    ): Response {
         try {
             $registrationService->registerUser($request);
-            // if creation successfull => send mail and return success
+
             return new JsonResponse([], Response::HTTP_OK);
         } catch (ServiceException $e) {
             return new JsonResponse([
                 'code' => $e->getCode(),
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], $e->getHttpCode());
         }
     }
@@ -37,25 +36,20 @@ class RegistrationController extends AbstractController
      */
     public function activateUser(
         RegistrationService $registrationService,
-        Request             $request
-    ): Response
-    {
+        Request $request
+    ): Response {
         try {
             if (!$code = $request->query->get('c')) {
-                throw  new ServiceException(
-                    'No valid activation code provided',
-                    '4000',
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
+                throw new ServiceException('No valid activation code provided', '4000', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $registrationService->activateUser($code);
-            return new JsonResponse([]);
 
+            return new JsonResponse([]);
         } catch (ServiceException $e) {
             return new JsonResponse([
                 'code' => $e->getCode(),
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], $e->getHttpCode());
         }
     }

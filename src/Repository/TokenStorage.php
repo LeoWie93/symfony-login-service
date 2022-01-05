@@ -11,10 +11,9 @@ class TokenStorage
     private EntityManagerInterface $em;
 
     public function __construct(
-        TokenRepository        $repository,
+        TokenRepository $repository,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->em = $em;
     }

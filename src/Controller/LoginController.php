@@ -17,9 +17,8 @@ class LoginController extends AbstractController
      */
     public function login(
         CredentialService $credentialService,
-        Request           $request
-    )
-    {
+        Request $request
+    ) {
         $username = $request->request->get('username') ?? '';
         $password = $request->request->get('password') ?? '';
 
@@ -38,11 +37,11 @@ class LoginController extends AbstractController
         } catch (ServiceException $e) {
             return new JsonResponse([
                 'code' => $e->getCode(),
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], $e->getHttpCode());
         } catch (\Exception $e) {
             //TODO create usable json response. LWI 04.01.2021
-            die(var_dump($e->getMessage()));
+            exit(var_dump($e->getMessage()));
         }
     }
 
