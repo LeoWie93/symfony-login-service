@@ -7,9 +7,6 @@ use App\Exceptions\ServiceException;
 use App\Repository\TokenStorage;
 use App\Repository\UserStorage;
 
-/**
- * Class CredentialService.
- */
 class CredentialService
 {
     private JWTService $jwtService;
@@ -17,10 +14,11 @@ class CredentialService
     private TokenStorage $tokenStorage;
 
     public function __construct(
-        JWTService $jwtService,
-        UserStorage $userStorage,
+        JWTService   $jwtService,
+        UserStorage  $userStorage,
         TokenStorage $tokenStorage
-    ) {
+    )
+    {
         $this->jwtService = $jwtService;
         $this->userStorage = $userStorage;
         $this->tokenStorage = $tokenStorage;

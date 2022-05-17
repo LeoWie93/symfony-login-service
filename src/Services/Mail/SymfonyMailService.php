@@ -2,13 +2,14 @@
 
 namespace App\Services\Mail;
 
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 class SymfonyMailService
 {
     private MailerInterface $mailer;
 
+    //TODO inject from mail as .env
     public function __construct(
         MailerInterface $mailer
     ) {
@@ -16,14 +17,14 @@ class SymfonyMailService
     }
 
     // TODO move this into its own mail service or send mails directly from application
-    public function sendMail(): void
+    public function sendMail(ServiceMail $mail): void
     {
-        $email = (new Email())
-            ->from('idp@service.com')
-            ->to('user@email.ch')
-            ->subject('Test Mail')
-            ->text('Just Text Body')
-            ->html('<p>Html Text Body</p>');
+        $email = (new TemplatedEmail())
+            ->from($mail->getFrom())
+            ->to($mail->getTo())
+            ->subject($mail->getSubject())
+            ->htmlTemplate($mail->getTemplate())
+            ->context($mail->getContext());
 
         $this->mailer->send($email);
     }

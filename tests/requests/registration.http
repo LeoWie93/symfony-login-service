@@ -6,5 +6,5 @@ email={{email}}&username={{username}}&password={{password}}&salutation=male
 
 ###
 
-GET http://{{serverUrl}}/api/activate-user?c=cfef40103e2669b409817386d376b863defdcf1c
+GET http://{{serverUrl}}/api/activate-user?c=8a49622bf61b96d6a32badbb532589abc7769e60
 Accept: application/json

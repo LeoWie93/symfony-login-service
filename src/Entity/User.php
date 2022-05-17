@@ -23,7 +23,7 @@ class User
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private string $email;
+    private string $contactMail;
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -60,6 +60,16 @@ class User
      */
     private $activationCode;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $registered;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $activated;
+
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
@@ -70,14 +80,14 @@ class User
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getContactMail(): ?string
     {
-        return $this->email;
+        return $this->contactMail;
     }
 
-    public function setEmail(string $email): self
+    public function setContactMail(string $contactMail): self
     {
-        $this->email = $email;
+        $this->contactMail = $contactMail;
 
         return $this;
     }
@@ -180,6 +190,35 @@ class User
     public function setActivationCode(?string $activationCode): self
     {
         $this->activationCode = $activationCode;
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        return get_object_vars($this);
+    }
+
+    public function getRegistered(): ?int
+    {
+        return $this->registered;
+    }
+
+    public function setRegistered(int $registered): self
+    {
+        $this->registered = $registered;
+
+        return $this;
+    }
+
+    public function getActivated(): ?int
+    {
+        return $this->activated;
+    }
+
+    public function setActivated(?int $activated): self
+    {
+        $this->activated = $activated;
 
         return $this;
     }

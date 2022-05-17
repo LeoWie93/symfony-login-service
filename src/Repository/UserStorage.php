@@ -11,9 +11,10 @@ class UserStorage
     private EntityManagerInterface $em;
 
     public function __construct(
-        UserRepository $repository,
+        UserRepository         $repository,
         EntityManagerInterface $em
-    ) {
+    )
+    {
         $this->repository = $repository;
         $this->em = $em;
     }
@@ -33,6 +34,11 @@ class UserStorage
     public function findOneByUsername(string $username): ?User
     {
         return $this->repository->findOneBy(['username' => $username]);
+    }
+
+    public function findOneByCriteria(string $contactMail)
+    {
+        return $this->repository->findIfAlreadyExists($contactMail);
     }
 
     public function findOneByActivationCode($code): ?User
